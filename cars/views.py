@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from . import models
+from .forms import ReviewForm
 
 
 def list(request):
@@ -19,7 +20,6 @@ def add(request):
 
 
 def delete(request):
-
     if request.POST:
         pk = request.POST['pk']
         try:
@@ -30,3 +30,24 @@ def delete(request):
             return redirect(reverse('cars:list'))
     else:
         return render(request, 'cars/delete.html')
+
+
+def rental_review(request):
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            print(form.cleaned_data)
+            return redirect(reverse('cars:thank_you'))
+
+    else:
+        form = ReviewForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'cars/rental_review.html', context)
+
+
+def thank_you(request):
+    return render(request, 'cars/thank_you.html')
