@@ -1,8 +1,22 @@
 from django import forms
+from .models import Review
+from django.forms import ModelForm
 
 
-class ReviewForm(forms.Form):
-    first_name = forms.CharField(label='First Name', max_length=100)
-    last_name = forms.CharField(label='Last Name', max_length=100)
-    email = forms.EmailField(label='Email')
-    review = forms.CharField(label='Please write your Review here', max_length=1000)
+class ReviewForm(ModelForm):
+    class Meta:
+        model = Review
+        fields = ['first_name', 'surname', 'rating']
+
+        labels = {
+            'first_name': "Your First Name",
+            'surname': "Your Surname",
+            'rating': "Your Rating"
+        }
+
+        error_messages = {
+            'rating': {
+                'min_value': "YO! Min value is 1",
+                'max_value': "YO! Min value is 5"
+            }
+        }
